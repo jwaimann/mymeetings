@@ -1,0 +1,81 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+* {
+  -webkit-border-radius: 0 !important;
+     -moz-border-radius: 0 !important;
+          border-radius: 0 !important;
+}
+
+.nav li {
+    padding: 5px;
+}
+
+.bordered{
+    padding: 15px;
+    -moz-box-shadow: 0;
+    -webkit-box-shadow: 0;
+    box-shadow: 0;    
+}
+
+.no-bordered{
+    border: 0;
+    padding: 5px;
+    -moz-box-shadow: 0;
+    -webkit-box-shadow: 0;
+    box-shadow: 0;   
+}
+
+.well{
+    border: 0;
+    -moz-box-shadow: 0;
+    -webkit-box-shadow: 0;
+    box-shadow: 0;   
+    width:225px;
+}
+
+.scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.post
+{
+    word-wrap: break-word;
+}
+
+.done-true {
+  text-decoration: line-through;
+  color: #bbb;
+}
+
+.small{
+    word-wrap: break-word;
+    font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+.users{
+    max-height: 200px;   
+    height: 20%px;
+}
+.topics{
+    max-height: 350px;   
+    height: 70%px;
+}
+.posts{
+    max-height: 550px;   
+    height: 75%; 
+    position: relative;
+}
+.top-space{
+    padding-top: 20px;
+}
+.meeting{
+    width:95%;
+    padding: 7px;
+}

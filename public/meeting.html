@@ -1,0 +1,43 @@
+
+<div class="col-md-9 top-space" ng-show="authenticated">
+    <div class="bordered scrollable posts" id="post-stream" scroll-glue="true" >
+    	<h4>Feed</h4>
+    		<div class="post" ng-repeat="post in posts | orderBy:'created_at':false"> 
+                <hr>
+    			<p>{{post.text}}</p>
+    			<small><strong>by @{{post.created_by}}</strong></small>
+    			<small class="pull-right">{{post.created_at | date:"h:mma 'on' MMM d, y"}}</small>
+    		</div>
+    </div>
+    <div class="clearfix sidebar-nav-fixed">
+      <form  ng-Submit="post()" >
+        <textarea required class="form-control" id="m" maxlength="200" rows="3" placeholder="Say something" ng-model="newPost.text"></textarea>
+        <input class="btn submit-btn pull-right" type="submit" value="SEND" />
+      </form>
+    </div>
+</div>
+<div class="col-md-3 top-space" ng-show="authenticated">
+    <div class="sidebar-nav-fixed pull-right affix" >
+        <div class="well">
+            <div class="nav-header"><strong>JOINED</strong></div>
+            <ul class="nav scrollable users">
+                <br>
+                <li ng-repeat="user in users"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.username}}
+                </li>
+            </ul>
+        </div>
+        <div class="well" >
+            <div class="nav-header"><strong>TOPICS</strong></div>
+            <br>
+            <form>
+                <input class="no-bordered" type="text" ng-model="newTodo.text" ng-model-instant />
+                <button class="no-bordered" ng-click="addTodo()"><strong> + </strong></button>
+            </form>
+            <ul class="nav scrollable topics" class="small">
+              <li ng-repeat="todo in todos">
+                 <input type="checkbox" ng-model="todo.done" ng-change="toggleSync(todo)"/><span class="done-{{todo.done}}"> {{todo.text}}</span>
+              </li>
+            </ul>
+        </div>
+    </div>
+</div>

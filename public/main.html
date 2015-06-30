@@ -1,0 +1,28 @@
+
+<div class="col-md-12 top-space" ng-show="authenticated">
+	<div class="bordered">
+		<h4>Start a meeting here!</h4>
+		<form ng-Submit="post()">
+			<input class="meeting" type="text" required maxlength="200" placeholder="Choose a name for your meeting" ng-model="newMeeting.name"
+			/>
+			<input class="btn submit-btn" type="submit" value="+" />
+		</form>
+	</div>
+	<div class="bordered scrollable posts" id="post-stream">
+		<h4>Meetings</h4>
+		<div class="bordered">
+			<div class="post" ng-repeat="meeting in meetings | orderBy:'created_at':true">
+				<p><strong>{{meeting.name}}</strong>
+					<small>
+						- created by @{{meeting.created_by}} at {{meeting.created_at | date:"h:mma 'on' MMM d, y"}}
+					</small>
+					<small class="pull-right">
+						<a href="#/meetings/{{meeting._id}}">View</a>-
+						<a href="">Edit</a>-
+						<a href="">Delete</a>
+					</small>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
