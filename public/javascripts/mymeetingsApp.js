@@ -11,7 +11,6 @@ var app = angular.module('mymeetingsApp', ['ngRoute', 'ngResource', 'luegg.direc
   }; 
 });
 
-
 app.config(function($routeProvider){
   $routeProvider
     .when('/meetings', {
@@ -31,7 +30,6 @@ app.config(function($routeProvider){
       controller: 'authController'
     });
 });
-
 
 app.factory('postService', function($resource){
   return $resource('/api/posts/:id');
