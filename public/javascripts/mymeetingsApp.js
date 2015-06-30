@@ -55,10 +55,7 @@ app.factory('meetingsService', function($resource){
   return $resource('/api/meetings/:user_id');
 });
 
-app.controller('meetingsController', function(meetingsService, meetingService,$scope, $rootScope, $routeParams){
-  //TODO: remove this line
-  //$rootScope.current_user = "cd875a60-1e68-11e5-a0e5-3b7fb1c55932";
-  
+app.controller('meetingsController', function(meetingsService, meetingService,$scope, $rootScope, $routeParams){ 
   $scope.meetings = meetingsService.query({user_id: $rootScope.current_user_id});
   
   $scope.post = function() {
@@ -73,10 +70,7 @@ app.controller('meetingsController', function(meetingsService, meetingService,$s
 });
 
 
-app.controller('mainController', function(postService, userService,topicService, messageService, $scope, $rootScope, $routeParams){
-   //TODO: remove this line
-  //$rootScope.current_user = "cd875a60-1e68-11e5-a0e5-3b7fb1c55932";
-  
+app.controller('mainController', function(postService, userService,topicService, messageService, $scope, $rootScope, $routeParams){ 
   $scope.meeting_id =  $routeParams.id;
 	$scope.posts = messageService.query({id: $scope.meeting_id});
   $scope.todos = topicService.query({id: $scope.meeting_id});
