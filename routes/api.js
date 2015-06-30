@@ -46,8 +46,8 @@ router.route('/post')
                 if (err){
                     return res.send(500, err);
                 }
-                return res.json(meeting);
-        });
+                return res.json(post);
+            });
        });
           
     });  
@@ -76,7 +76,7 @@ router.route('/topic/:id')
         Meeting.findById(req.params.id,function(err, meeting){
             if(err)
                 res.send(err);
-            res.send(meeting.topics);
+            res.json(meeting.topics);
         });
     }); 
     
@@ -85,7 +85,7 @@ router.route('/post/:id')
         Meeting.findById(req.params.id,function(err, meeting){
             if(err)
                 res.send(err);
-            res.send(meeting.posts);
+            res.json(meeting.posts);
         });
     });
     
@@ -96,7 +96,7 @@ router.route('/user/:id')
         exec(function(err, meeting){
             if(err)
                 res.send(err);
-            res.send(meeting.users);
+            res.json(meeting.users);
         });
     });
     
@@ -120,7 +120,7 @@ router.route('/user')
                     }
                     current_user.meetings.push(meeting._id);
                     current_user.save();
-                    return res.json(meeting);
+                    return res.json(user);
                 });
             }
           });         

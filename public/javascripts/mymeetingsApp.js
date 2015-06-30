@@ -72,7 +72,7 @@ app.controller('meetingsController', function(meetingsService, meetingService,$s
 
 app.controller('mainController', function(postService, userService,topicService, messageService, $scope, $rootScope, $routeParams){ 
   $scope.meeting_id =  $routeParams.id;
-	$scope.posts = messageService.query({id: $scope.meeting_id});
+  $scope.posts = messageService.query({id: $scope.meeting_id});
   $scope.todos = topicService.query({id: $scope.meeting_id});
   $scope.users = userService.query({id: $scope.meeting_id});
 	$scope.newPost = {created_by: '', text: '', created_at: ''};
@@ -81,20 +81,23 @@ app.controller('mainController', function(postService, userService,topicService,
   var socket = io();
 
   var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
-  userService.save(user, function(){
-     socket.emit('new user',  $rootScope.current_user_id);
+  userService.save(user, function(res){
+     socket.emit('new user',  res);
   });
   
-  socket.on('chat message', function(msg){
-    $scope.posts = messageService.query({id: $scope.meeting_id});
+  socket.on('chat message', function(msg){   
+    $scope.posts.push(msg);
+    $scope.$apply();
   });
   
   socket.on('topic', function(msg){
-    $scope.todos = topicService.query({id: $scope.meeting_id});
+    $scope.todos.push(msg);
+    $scope.$apply(); 
   });
   
   socket.on('new user', function(msg){
-	     $scope.users = userService.query({id: $scope.meeting_id});
+	     $scope.users.push(msg);
+       $scope.$apply();  
   });
 	
 	$scope.post = function() {
@@ -102,10 +105,9 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.newPost.created_by_id = $rootScope.current_user_id;
 	  $scope.newPost.created_at = Date.now();
     $scope.newPost.meeting_id = $scope.meeting_id;  
-		socket.emit('chat message',  angular.toJson($scope.newPost));
-        
-	  messageService.save($scope.newPost, function(){
-	    $scope.posts = messageService.query({id: $scope.meeting_id});
+
+	  messageService.save($scope.newPost, function(res){
+      socket.emit('chat message',  res);
 	    $scope.newPost = {created_by: '', text: '', created_at: ''};
 	  });
 	};
@@ -115,10 +117,9 @@ app.controller('mainController', function(postService, userService,topicService,
 	  $scope.newTodo.created_at = Date.now();
     $scope.newTodo.done = false;
     $scope.newTodo.meeting_id = $scope.meeting_id;
-		socket.emit('topic',  angular.toJson($scope.newTodo));
-        
-	  topicService.save($scope.newTodo, function(){
-	    $scope.todos = topicService.query({id: $scope.meeting_id});
+   
+	  topicService.save($scope.newTodo, function(res){
+      socket.emit('topic',  res);
 	    $scope.newTodo = {created_by: '', text: '', created_at: '', meeting_id:'', done:false};
 	  });
   };
