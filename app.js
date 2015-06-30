@@ -13,8 +13,8 @@ var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');    
 var http = require('http');                   
 //localconnect//mongoose.connect('mongodb://localhost/mymeetings');   
-//remoteconnect//  
-mongoose.connect('mongodb:admin:admin@ds047592.mongolab.com:47592/mymeetings');
+//remoteconnect//
+mongoose.connect('mongodb://admin:admin@ds047592.mongolab.com:47592/mymeetings');
 
 
 var app = express(); 
