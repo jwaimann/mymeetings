@@ -78,24 +78,24 @@ app.controller('mainController', function(postService, userService,topicService,
 	$scope.newPost = {created_by: '', text: '', created_at: ''};
   $scope.newTodo = {created_by: '', text: '', created_at: '', done:false};
   
-  $scope.socket = io();
+  var socket = io();
 
   var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
   userService.save(user, function(res){
-     $scope.socket.emit('new user',  res);
+     socket.emit('new user',  res);
   });
   
-  $scope.socket.on('chat message', function(msg){   
+  socket.on('chat message', function(msg){   
     $scope.posts.push(msg);
     $scope.$apply();
   });
   
-  $scope.socket.on('topic', function(msg){
+  socket.on('topic', function(msg){
     $scope.todos.push(msg);
     $scope.$apply(); 
   });
   
-  $scope.socket.on('new user', function(msg){
+  socket.on('new user', function(msg){
 	     $scope.users.push(msg);
        $scope.$apply();  
   });
@@ -107,7 +107,7 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.newPost.meeting_id = $scope.meeting_id;  
 
 	  messageService.save($scope.newPost, function(res){
-      $scope.socket.emit('chat message',  res);
+      socket.emit('chat message',  res);
 	    $scope.newPost = {created_by: '', text: '', created_at: ''};
 	  });
 	};
@@ -119,13 +119,13 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.newTodo.meeting_id = $scope.meeting_id;
    
 	  topicService.save($scope.newTodo, function(res){
-      $scope.socket.emit('topic',  res);
+      socket.emit('topic',  res);
 	    $scope.newTodo = {created_by: '', text: '', created_at: '', meeting_id:'', done:false};
 	  });
   };
   
   $scope.toggleSync = function(item) {
-     $scope.socket.emit('topic changed',  '');
+     socket.emit('topic changed',  '');
   };
 });
 
