@@ -80,10 +80,12 @@ app.controller('mainController', function(postService, userService,topicService,
   
   var socket = io();
 
-  var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
-  userService.save(user, function(res){
-     socket.emit('new user',  res);
-  });
+  if($rootScope.current_user_id != ''){
+    var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
+    userService.save(user, function(res){
+       socket.emit('new user',  res);
+    });
+  }
   
   socket.on('chat message', function(msg){   
     $scope.posts.push(msg);
