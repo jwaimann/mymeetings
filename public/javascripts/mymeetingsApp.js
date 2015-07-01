@@ -122,7 +122,7 @@ app.controller('mainController', function(postService, userService,topicService,
    
 	  topicService.save($scope.newTodo, function(res){
       socket.emit('topic',  res);
-	    $scope.newTodo = {created_by: '', text: '', created_at: '', meeting_id:'', done:false};
+      $scope.newTodo = {created_by: '', text: '', created_at: '', meeting_id:'', done:false};
 	  });
   };
   
