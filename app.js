@@ -82,14 +82,20 @@ app.set('port', port);
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
+var io2= require('socket.io')(server);
+var io3= require('socket.io')(server);
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
+});
+io3.on('connection', function(socket){
   socket.on('new user', function(msg){
     io.emit('new user', msg);
   });
+});
+io2.on('connection', function(socket){
   socket.on('topic', function(msg){
     io.emit('topic', msg);
   });

@@ -79,11 +79,13 @@ app.controller('mainController', function(postService, userService,topicService,
   $scope.newTodo = {created_by: '', text: '', created_at: '', done:false};
   
   var socket = io();
+  var socket2 = io();
+  var socket3 = io();
 
   if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
     userService.save(user, function(res){
-       socket.emit('new user',  res);
+       socket3.emit('new user',  res);
     });
   }
   
@@ -92,12 +94,12 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.$apply();
   });
   
-  socket.on('topic', function(msg){
+  socket2.on('topic', function(msg){
     $scope.todos.push(msg);
     $scope.$apply(); 
   });
   
-  socket.on('new user', function(msg){
+  socket3.on('new user', function(msg){
 	     $scope.users.push(msg);
        $scope.$apply();  
   });
@@ -121,7 +123,7 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.newTodo.meeting_id = $scope.meeting_id;
    
 	  topicService.save($scope.newTodo, function(res){
-      socket.emit('topic',  res);
+      socket2.emit('topic',  res);
 	    $scope.newTodo = {created_by: '', text: '', created_at: '', meeting_id:'', done:false};
 	  });
   };
