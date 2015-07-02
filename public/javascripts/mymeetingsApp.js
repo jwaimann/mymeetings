@@ -109,7 +109,7 @@ app.controller('mainController', function (postService, userService, topicServic
       $scope.newPost.meeting_id = $scope.meeting_id;
   
       messageService.save($scope.newPost, function (res) {
-              socket.emit('cm', res);
+              socket.emit('chat message', res);
               $scope.newPost = { created_by: '', text: '', created_at: '' };
       });
     };
@@ -122,7 +122,7 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-            socket.emit('tm', res);
+            socket.emit('topic message', res);
             $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };

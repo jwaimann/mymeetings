@@ -84,13 +84,13 @@ var server = http.Server(app);
 var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
-  socket.on('cm', function(msg){
+  socket.on('chat message', function(msg){
     io.emit('cm', msg);
   });
-  socket.on('tm', function(msg){
+  socket.on('topic message', function(msg){
     io.emit('tm', msg);
   });
-  socket.on('um', function(msg){
+  socket.on('user message', function(msg){
     io.emit('um', msg);
   });
 });
