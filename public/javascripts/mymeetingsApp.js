@@ -87,12 +87,12 @@ app.controller('mainController', function (postService, userService, topicServic
     });
   }*/
 
-  socket.on('cm', function (msg) {
+  socket.on('chat message', function (msg) {
     $scope.posts.push(msg);
     $scope.$apply();
   });
 
-  socket.on('tm', function (msg) {
+  socket.on('topic message', function (msg) {
     $scope.todos.push(msg);
     $scope.$apply();
   });
