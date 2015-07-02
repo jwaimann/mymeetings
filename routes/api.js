@@ -74,6 +74,7 @@ router.route('/topic')
             });
         });
     });
+});
     
 router.route('/topic/:id')
     .get(function(req, res){
