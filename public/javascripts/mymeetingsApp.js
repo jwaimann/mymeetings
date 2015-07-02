@@ -87,17 +87,17 @@ app.controller('mainController', function(postService, userService,topicService,
     });
   }*/
   
-  /*socket.on('chat message', function(msg){   
+  socket.on('chat message', function(msg){   
     $scope.posts.push(msg);
     $scope.$apply();
-  });*/
+  });
   
   socket.on('topic', function(msg){
     $scope.todos.push(msg);
     $scope.$apply(); 
   });
   
- /* socket.on('new user', function(msg){
+  /*socket.on('new user', function(msg){
 	     $scope.users.push(msg);
        $scope.$apply();  
   });*/
@@ -109,7 +109,7 @@ app.controller('mainController', function(postService, userService,topicService,
     $scope.newPost.meeting_id = $scope.meeting_id;  
 
 	  messageService.save($scope.newPost, function(res){
-     /* socket.emit('chat message',  res);*/
+      socket.emit('chat message',  res);
 	    $scope.newPost = {created_by: '', text: '', created_at: ''};
 	  });
 	};

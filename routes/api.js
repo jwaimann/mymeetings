@@ -51,24 +51,28 @@ router.route('/post')
        });
           
     });  
-});
+    });
 
 router.route('/topic')
-    .post(function(req,res){
-        Meeting.findOne({"_id":req.body.meeting_id},function(err,meeting){
-              if(err)
-                    res.send(err);
-              var topic = new Topic();
-              topic.text = req.body.text;
-              topic.created_by = req.body.created_by;
-              meeting.topics.push(topic);
-              meeting.save(function(err, meeting) {
-                    if (err){
-                        return res.send(500, err);
-                    }       
-                    return res.json(topic);                
-              });                    
-        });  
+    .post(function (req, res) {
+    Meeting.findOne({ "_id": req.body.meeting_id }, function (err, meeting) {
+        if (err)
+            res.send(err);
+        var topic = new Topic();
+        topic.text = req.body.text;
+        User.findOne({ "_id": req.body.created_by_id }, function (err, user) {
+            if (err) {
+                return res.send(500, err);
+            }
+            topic.created_by = user.username;
+            meeting.topics.push(topic);
+            meeting.save(function (err, meeting) {
+                if (err) {
+                    return res.send(500, err);
+                }
+                return res.json(topic);
+            });
+        });
     });
     
 router.route('/topic/:id')
