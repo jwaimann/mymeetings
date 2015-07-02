@@ -86,7 +86,7 @@ var io = require('socket.io')(server);
 var chat =  io
   .of('/chat')
   .on('connection', function(socket){
-    socket.on('chat message', function(msg){
+    chat.on('chat message', function(msg){
       socket.emit('chat message', msg);
     });
 });
