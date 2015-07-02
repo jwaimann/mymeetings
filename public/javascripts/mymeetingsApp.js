@@ -90,9 +90,12 @@ app.controller('mainController', function (postService, userService, topicServic
     });
   }*/
 
-  chat.on('chat message', function (msg) {
-    $scope.posts.push(msg);
-    $scope.$apply();
+chat.on('connect', function()
+  {
+    chat.on('chat message', function (msg) {
+      $scope.posts.push(msg);
+      $scope.$apply();
+    });
   });
 
   topic.on('topic message', function (msg) {
