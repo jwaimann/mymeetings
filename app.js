@@ -86,25 +86,19 @@ var io = require('socket.io')(server);
 var chat =  io
   .of('/chat')
   .on('connection', function(socket){
-    chat.on('chat message', function(msg){
-      socket.emit('chat message', msg);
-    });
+      socket.emit('chat message', '0101');
 });
 
 var topic = io
   .of('/topic')
   .on('connection', function (socket) {
-    socket.on('topic message', function(msg){
-      socket.emit('topic message', msg);
-    });
+     socket.emit('topic message', '0101');
   });
 
 var user = io
   .of('/user')
   .on('connection', function (socket) {
-     socket.on('user message', function(msg){
-      socket.emit('user message', msg);
-    });
+      socket.emit('user message', '0101');
   });
 
 
