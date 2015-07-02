@@ -88,10 +88,10 @@ io.on('connection', function(socket){
     io.emit('chat message', msg);
   });
   socket.on('topic', function(msg){
-    io.emit('topic', msg);
+    io.emit('topic message', msg);
   });
   socket.on('new user', function(msg){
-    io.emit('new user', msg);
+    io.emit('user message', msg);
   });
 });
 

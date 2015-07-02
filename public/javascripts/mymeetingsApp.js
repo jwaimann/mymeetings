@@ -92,7 +92,7 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.$apply();
   });
 
-  socket.on('topic', function (msg) {
+  socket.on('topic message', function (msg) {
     $scope.todos.push(msg);
     $scope.$apply();
   });
