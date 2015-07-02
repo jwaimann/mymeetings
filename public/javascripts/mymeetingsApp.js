@@ -80,8 +80,8 @@ app.controller('mainController', function (postService, userService, topicServic
 
   //var socket = io.connect();
   
-   var chat = io.connect('/chat');
-   var topic = io.connect('/topic');
+   var chat = io.connect('https://mymeetings.herokuapp.com/chat');
+   var topic = io.connect('https://mymeetings.herokuapp.com/topic');
 
   /*if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
