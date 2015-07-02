@@ -83,25 +83,22 @@ app.controller('mainController', function (postService, userService, topicServic
   if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
     userService.save(user, function(res){
-       socket.emit('user message',  res);
+       var msg = { id: '1' , content: res };
+       socket.emit('chat message',  msg);
     });
   }
 
 
   socket.on('chat message', function (msg) {
-    $scope.posts.push(msg);
+    if (msg.id=='1')
+      $scope.users.push(msg.content);
+    if (msg.id=='2')  
+      $scope.posts.push(msg.content);
+    if (msg.id=='3')
+      $scope.todos.push(msg.content);
     $scope.$apply();
   });
 
-  socket.on('topic message', function (msg) {
-    $scope.todos.push(msg);
-    $scope.$apply();
-  });
-  
-  socket.on('user message', function(msg){
-	     $scope.users.push(msg);
-       $scope.$apply();  
-  });
 
     $scope.post = function () {
       $scope.newPost.created_by = $rootScope.current_user;
@@ -110,7 +107,8 @@ app.controller('mainController', function (postService, userService, topicServic
       $scope.newPost.meeting_id = $scope.meeting_id;
   
       messageService.save($scope.newPost, function (res) {
-              socket.emit('chat message', res);
+              var msg = { id: '2' , content: res };
+              socket.emit('chat message', msg);
               $scope.newPost = { created_by: '', text: '', created_at: '' };
       });
     };
@@ -123,7 +121,8 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-        socket.emit('topic message', res);
+        var msg = { id: '3' , content: res };
+        socket.emit('chat message', msg);
         $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };
