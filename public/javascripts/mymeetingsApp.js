@@ -78,35 +78,30 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newPost = { created_by: '', text: '', created_at: '' };
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
-  //var socket = io.connect();
+  var socket = io.connect();
   
-   var chat = io.connect('https://mymeetings.herokuapp.com/chat');
-   var topic = io.connect('https://mymeetings.herokuapp.com/topic');
-
-  /*if($rootScope.current_user_id != ''){
+  if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
     userService.save(user, function(res){
-       socket.emit('new user',  res);
+       socket.emit('user message',  res);
     });
-  }*/
+  }
 
-chat.on('connect', function()
-  {
-    chat.on('chat message', function (msg) {
-      $scope.posts.push(msg);
-      $scope.$apply();
-    });
+
+  socket.on('chat message', function (msg) {
+    $scope.posts.push(msg);
+    $scope.$apply();
   });
 
-  topic.on('topic message', function (msg) {
+  socket.on('topic message', function (msg) {
     $scope.todos.push(msg);
     $scope.$apply();
   });
   
-  /*socket.on('new user', function(msg){
+  socket.on('user message', function(msg){
 	     $scope.users.push(msg);
        $scope.$apply();  
-  });*/
+  });
 
     $scope.post = function () {
       $scope.newPost.created_by = $rootScope.current_user;
@@ -115,7 +110,7 @@ chat.on('connect', function()
       $scope.newPost.meeting_id = $scope.meeting_id;
   
       messageService.save($scope.newPost, function (res) {
-              chat.emit('chat message', res);
+              socket.emit('chat message', res);
               $scope.newPost = { created_by: '', text: '', created_at: '' };
       });
     };
@@ -128,7 +123,7 @@ chat.on('connect', function()
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-        topic.emit('topic message', res);
+        socket.emit('topic message', res);
         $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };
