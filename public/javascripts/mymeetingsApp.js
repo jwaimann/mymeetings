@@ -78,7 +78,7 @@ app.controller('mainController', function(postService, userService,topicService,
 	$scope.newPost = {created_by: '', text: '', created_at: ''};
   $scope.newTodo = {created_by: '', text: '', created_at: '', done:false};
   
-  var socket = io();
+  var socket = io.connect();
 
   /*if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
