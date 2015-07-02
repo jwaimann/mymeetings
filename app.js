@@ -85,13 +85,13 @@ var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+    io.emit('cm', msg);
   });
   socket.on('topic message', function(msg){
-    io.emit('topic message', msg);
+    io.emit('tm', msg);
   });
   socket.on('user message', function(msg){
-    io.emit('user message', msg);
+    io.emit('um', msg);
   });
 });
 
