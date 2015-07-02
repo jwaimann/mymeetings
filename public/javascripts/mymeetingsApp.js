@@ -78,7 +78,10 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newPost = { created_by: '', text: '', created_at: '' };
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
-  var socket = io.connect();
+  //var socket = io.connect();
+  
+   var chat = io.connect('/chat');
+   var topic = io.connect('/topic');
 
   /*if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
@@ -87,12 +90,12 @@ app.controller('mainController', function (postService, userService, topicServic
     });
   }*/
 
-  socket.on('cm', function (msg) {
+  chat.on('chat message', function (msg) {
     $scope.posts.push(msg);
     $scope.$apply();
   });
 
-  socket.on('tm', function (msg) {
+  topic.on('topic message', function (msg) {
     $scope.todos.push(msg);
     $scope.$apply();
   });
@@ -109,7 +112,7 @@ app.controller('mainController', function (postService, userService, topicServic
       $scope.newPost.meeting_id = $scope.meeting_id;
   
       messageService.save($scope.newPost, function (res) {
-              socket.emit('chat message', res);
+              chat.emit('chat message', res);
               $scope.newPost = { created_by: '', text: '', created_at: '' };
       });
     };
@@ -122,14 +125,14 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-            socket.emit('topic message', res);
-            $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
+        topic.emit('topic message', res);
+        $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };
 
-  /*$scope.toggleSync = function (item) {
-        socket.emit('topic changed', '');
-  };*/
+  $scope.toggleSync = function (item) {
+        //socket.emit('topic changed', '');
+  };
 });
 
 

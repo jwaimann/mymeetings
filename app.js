@@ -83,17 +83,29 @@ app.set('port', port);
 var server = http.Server(app);
 var io = require('socket.io')(server);
 
-io.on('connection', function(socket){
-  socket.on('chat message', function(msg){
-    io.emit('cm', msg);
-  });
-  socket.on('topic message', function(msg){
-    io.emit('tm', msg);
-  });
-  socket.on('user message', function(msg){
-    io.emit('um', msg);
-  });
+var chat =  io
+  .of('/chat')
+  .on('connection', function(socket){
+    socket.on('chat message', function(msg){
+      socket.emit('chat message', msg);
+    });
 });
+
+var topic = io
+  .of('/topic')
+  .on('connection', function (socket) {
+    socket.on('topic message', function(msg){
+      socket.emit('topic message', msg);
+    });
+  });
+
+var user = io
+  .of('/user')
+  .on('connection', function (socket) {
+     socket.on('user message', function(msg){
+      socket.emit('user message', msg);
+    });
+  });
 
 
 server.listen(port, function(){
