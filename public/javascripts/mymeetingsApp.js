@@ -116,6 +116,7 @@ app.controller('mainController', function(postService, userService,topicService,
   
   $scope.addTodo = function () {
     $scope.newTodo.created_by = $rootScope.current_user;
+    $scope.newTodo.created_by_id = $rootScope.current_user_id;
 	  $scope.newTodo.created_at = Date.now();
     $scope.newTodo.done = false;
     $scope.newTodo.meeting_id = $scope.meeting_id;
