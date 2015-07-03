@@ -80,15 +80,15 @@ app.controller('mainController', function (postService, userService, topicServic
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
   var socket = io.connect();
-  
+  socket.emit('create', $scope.meeting_id);
+   
   if($rootScope.current_user_id != ''){
     var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
     userService.save(user, function(res){
-       var msg = { id: '1' , content: res };
-       socket.emit('chat message',  msg);
+       var msg = { id: '1' , content: res, room: $scope.meeting_id};
+       socket.emit('message',  msg);
     });
   }
-
 
   socket.on('chat message', function (msg) {
     if (msg.id=='1')
@@ -108,8 +108,8 @@ app.controller('mainController', function (postService, userService, topicServic
       $scope.newPost.meeting_id = $scope.meeting_id;
   
       messageService.save($scope.newPost, function (res) {
-              var msg = { id: '2' , content: res };
-              socket.emit('chat message', msg);
+              var msg = { id: '2' , content: res, room: $scope.meeting_id};
+              socket.emit('message', msg);
               $scope.newPost = { created_by: '', text: '', created_at: '' };
       });
     };
@@ -122,8 +122,8 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-        var msg = { id: '3' , content: res };
-        socket.emit('chat message', msg);
+        var msg = { id: '3' , content: res, room: $scope.meeting_id };
+        socket.emit('message', msg);
         $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };
