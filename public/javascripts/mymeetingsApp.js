@@ -62,8 +62,9 @@ app.controller('meetingsController', function (meetingsService, meetingService, 
         $scope.newMeeting.created_by = $rootScope.current_user;
         $scope.newMeeting.created_by_id = $rootScope.current_user_id;
         $scope.newMeeting.created_at = Date.now();
-        meetingService.save($scope.newMeeting, function () {
-	     $scope.meetings = meetingsService.query({ user_id: $rootScope.current_user_id });
+        meetingService.save($scope.newMeeting, function (res) {
+	       $scope.meetings.push(res);
+         $scope.$apply();
         });
         $scope.newMeeting = { created_by: '', name: '', created_at: '' };
     };
@@ -75,7 +76,7 @@ app.controller('mainController', function (postService, userService, topicServic
   $scope.posts = messageService.query({ id: $scope.meeting_id });
   $scope.todos = topicService.query({ id: $scope.meeting_id });
   $scope.users = userService.query({ id: $scope.meeting_id });
-    $scope.newPost = { created_by: '', text: '', created_at: '' };
+  $scope.newPost = { created_by: '', text: '', created_at: '' };
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
   var socket = io.connect();
