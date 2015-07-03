@@ -84,7 +84,7 @@ var server = http.Server(app);
 var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
-    socket.on('message', function(msg){
+    socket.on('chat message', function(msg){
       io.sockets.in(msg.room).emit('chat message', msg);
     });
     socket.on('create', function(room) {
