@@ -1,3 +1,4 @@
+/* global io */
 var app = angular.module('mymeetingsApp', ['ngRoute', 'ngResource', 'luegg.directives']).run(function ($rootScope) {
   $rootScope.authenticated = false;
   $rootScope.current_user = '';
