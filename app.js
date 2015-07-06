@@ -77,8 +77,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var port = process.env.PORT || 3000;
-app.set('port', port);
+app.set(process.env.PORT || 3000);
 
 var server = http.Server(app);
 var io = require('socket.io')(server);
@@ -93,7 +92,7 @@ io.on('connection', function(socket){
   });
 
 
-server.listen(port, function(){
+server.listen(process.env.PORT || 3000, function(){
   console.log('listening on *:3000');
 });
 
