@@ -77,7 +77,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var port = '3000';
+var port = process.env.PORT || 3000;
 app.set('port', port);
 
 var server = http.Server(app);
