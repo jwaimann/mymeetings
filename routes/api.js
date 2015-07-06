@@ -75,6 +75,37 @@ router.route('/topic')
         });
     });
 });
+
+
+router.route('/user')
+.post(function(req,res){
+    Meeting.findById(req.body.meeting_id,function(err,meeting){
+          if(err)
+                res.send(err);
+          var current_user = new User();
+          User.findOne({"_id":req.body.user_id}, function(err, user){
+            if(err)
+                res.send(err);
+            current_user = user;
+            if(meeting.users.indexOf(current_user._id) == -1)
+            {
+                meeting.users.push(current_user._id);
+                meeting.save(function(err, meeting) {
+                    if (err){
+                        return res.send(500, err);
+                    }
+                    current_user.meetings.push(meeting._id);
+                    current_user.save();
+                    return res.json(user);
+                });
+            }
+            else
+            {
+                return;
+            }
+          });         
+    });  
+});
     
 router.route('/topic/:id')
     .get(function(req, res){
@@ -106,35 +137,6 @@ router.route('/user/:id')
     });
     
 
-router.route('/user')
-.post(function(req,res){
-    Meeting.findById(req.body.meeting_id,function(err,meeting){
-          if(err)
-                res.send(err);
-          var current_user = new User();
-          User.findOne({"_id":req.body.user_id}, function(err, user){
-            if(err)
-                res.send(err);
-            current_user = user;
-            if(meeting.users.indexOf(current_user._id) == -1)
-            {
-                meeting.users.push(current_user._id);
-                meeting.save(function(err, meeting) {
-                    if (err){
-                        return res.send(500, err);
-                    }
-                    current_user.meetings.push(meeting._id);
-                    current_user.save();
-                    return res.json(user);
-                });
-            }
-            else
-            {
-                return;
-            }
-          });         
-    });  
-});
 
 //api for all meetings
 router.route('/meetings')
