@@ -85,7 +85,7 @@ var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
     socket.on('chat message', function(msg){
-      socket.broadcast.to(msg.room).emit('message', msg);
+      io.sockets.in(msg.room).emit('onMessage', msg);
     });
     socket.on('create', function(room) {
       socket.join(room);

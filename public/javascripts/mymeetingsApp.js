@@ -93,7 +93,7 @@ app.controller('mainController', function (postService, userService, topicServic
     });
   }
 
-  socket.on('message', function (msg) {
+  socket.on('onMessage', function (msg) {
     if (msg.id=='1')
       $scope.users.push(msg.content);
     if (msg.id=='2')  
