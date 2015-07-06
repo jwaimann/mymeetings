@@ -128,6 +128,10 @@ router.route('/user')
                     return res.json(user);
                 });
             }
+            else
+            {
+                return;
+            }
           });         
     });  
 });
