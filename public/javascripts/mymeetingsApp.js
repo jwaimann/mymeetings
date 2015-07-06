@@ -79,7 +79,7 @@ app.controller('mainController', function (postService, userService, topicServic
   $scope.newPost = { created_by: '', text: '', created_at: '' };
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
-  var socket = io.connect('https://mymeetings2.herokuapp.com/');
+  var socket = io.connect();
   socket.emit('create', $scope.meeting_id);
    
   if($rootScope.current_user_id != ''){
