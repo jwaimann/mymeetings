@@ -11,8 +11,9 @@ var index = require('./routes/index');
 var api = require('./routes/api');
 var authenticate = require('./routes/authenticate')(passport);
 var mongoose = require('mongoose');    
-var http = require('http');                   
-//localconnect//mongoose.connect('mongodb://localhost/mymeetings');   
+                
+//localconnect//
+//mongoose.connect('mongodb://localhost/mymeetings');   
 //remoteconnect//
 mongoose.connect('mongodb://admin:admin@ds047592.mongolab.com:47592/mymeetings');
 
@@ -75,26 +76,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
-});
-
-var port = '3000';
-app.set('port', port);
-
-var server = http.Server(app);
-var io = require('socket.io')(server);
-
-io.on('connection', function(socket){
-    socket.on('chat message', function(msg){
-      io.sockets.in(msg.room).emit('onMessage', msg);
-    });
-    socket.on('create', function(room) {
-      socket.join(room);
-    });
-  });
-
-
-server.listen(port, function(){
-  console.log('listening on *:3000');
 });
 
 
