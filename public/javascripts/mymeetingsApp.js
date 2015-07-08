@@ -32,9 +32,6 @@ app.config(function ($routeProvider) {
     });
 });
 
-app.factory('postService', function ($resource) {
-  return $resource('/api/posts/:id');
-});
 
 app.factory('messageService', function ($resource) {
   return $resource('/api/post/:id');
@@ -45,7 +42,11 @@ app.factory('userService', function ($resource) {
 });
 
 app.factory('topicService', function ($resource) {
-  return $resource('/api/topic/:id');
+  return $resource('/api/topic/:id', { id: '@id' }, {
+    update: {
+      method: 'PUT' 
+    }
+  });
 });
 
 app.factory('meetingService', function ($resource) {
@@ -64,15 +65,15 @@ app.controller('meetingsController', function (meetingsService, meetingService, 
         $scope.newMeeting.created_by_id = $rootScope.current_user_id;
         $scope.newMeeting.created_at = Date.now();
         meetingService.save($scope.newMeeting, function (res) {
-	       $scope.meetings.push(res);
-         $scope.$apply();
+            $scope.meetings.push(res);
+            $scope.$apply();
         });
         $scope.newMeeting = { created_by: '', name: '', created_at: '' };
     };
 });
 
 
-app.controller('mainController', function (postService, userService, topicService, messageService, $scope, $rootScope, $routeParams) {
+app.controller('mainController', function (userService, topicService, messageService, $scope, $rootScope, $routeParams) {
   $scope.meeting_id = $routeParams.id;
   $scope.posts = messageService.query({ id: $scope.meeting_id });
   $scope.todos = topicService.query({ id: $scope.meeting_id });
@@ -81,41 +82,45 @@ app.controller('mainController', function (postService, userService, topicServic
   $scope.newTodo = { created_by: '', text: '', created_at: '', done: false };
 
   var socket = io.connect();
+  
   socket.emit('create', $scope.meeting_id);
-   
-  if($rootScope.current_user_id != ''){
-    var user = {user_id : $rootScope.current_user_id , meeting_id : $scope.meeting_id};
-    userService.save(user, function(res){
-       if (res)
-       {        
-         var msg = { id: '1' , content: res, room: $scope.meeting_id};
-         socket.emit('chat message',  msg);
-       }
+  
+  socket.on('onMessage', function (post) {
+        $scope.posts.push(post);
+        $scope.$apply();
+  });
+
+  socket.on('onUser', function (user) {
+        $scope.users.push(user);
+        $scope.$apply();
+  });
+
+  socket.on('onTopic', function (topic) {
+        $scope.todos.push(topic);
+        $scope.$apply();
+  });
+
+  if ($rootScope.current_user_id != '') {
+    var user = { user_id: $rootScope.current_user_id, meeting_id: $scope.meeting_id };
+    userService.save(user, function (res) {
+            if (res) {
+                var msg = { content: res, room: $scope.meeting_id };
+                socket.emit('user message', msg);
+            }
     });
   }
 
-  socket.on('onMessage', function (msg) {
-    if (msg.id=='1')
-      $scope.users.push(msg.content);
-    if (msg.id=='2')  
-      $scope.posts.push(msg.content);
-    if (msg.id=='3')
-      $scope.todos.push(msg.content);
-    $scope.$apply();
-  });
+  $scope.post = function () {
+        $scope.newPost.created_by = $rootScope.current_user;
+        $scope.newPost.created_by_id = $rootScope.current_user_id;
+        $scope.newPost.created_at = Date.now();
+        $scope.newPost.meeting_id = $scope.meeting_id;
 
-
-    $scope.post = function () {
-      $scope.newPost.created_by = $rootScope.current_user;
-      $scope.newPost.created_by_id = $rootScope.current_user_id;
-      $scope.newPost.created_at = Date.now();
-      $scope.newPost.meeting_id = $scope.meeting_id;
-  
-      messageService.save($scope.newPost, function (res) {
-              var msg = { id: '2' , content: res, room: $scope.meeting_id};
-              socket.emit('chat message', msg);
-              $scope.newPost = { created_by: '', text: '', created_at: '' };
-      });
+        messageService.save($scope.newPost, function (res) {
+            var msg = { content: res, room: $scope.meeting_id };
+            socket.emit('chat message', msg);
+            $scope.newPost = { created_by: '', text: '', created_at: '' };
+        });
     };
 
   $scope.addTodo = function () {
@@ -126,13 +131,14 @@ app.controller('mainController', function (postService, userService, topicServic
     $scope.newTodo.meeting_id = $scope.meeting_id;
 
     topicService.save($scope.newTodo, function (res) {
-        var msg = { id: '3' , content: res, room: $scope.meeting_id };
-        socket.emit('chat message', msg);     
-        $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
+            var msg = { content: res, room: $scope.meeting_id };
+            socket.emit('topic message', msg);
+            $scope.newTodo = { created_by: '', text: '', created_at: '', meeting_id: '', done: false };
     });
   };
 
   $scope.toggleSync = function (item) {
+        topicService.update({ id: item });
         //socket.emit('topic changed', '');
   };
 });

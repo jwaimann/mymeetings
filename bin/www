@@ -27,7 +27,13 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 io.on('connection', function(socket){
     socket.on('chat message', function(msg){
-      io.sockets.in(msg.room).emit('onMessage', msg);
+      io.sockets.in(msg.room).emit('onMessage', msg.content);
+    });
+    socket.on('user message', function(msg){
+      io.sockets.in(msg.room).emit('onUser', msg.content);
+    });
+    socket.on('topic message', function(msg){
+      io.sockets.in(msg.room).emit('onTopic', msg.content);
     });
     socket.on('create', function(room) {
       socket.join(room);

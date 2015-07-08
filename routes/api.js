@@ -5,6 +5,7 @@ var Post = mongoose.model('Post');
 var Topic = mongoose.model('Topic');
 var Meeting = mongoose.model('Meeting');
 var User = mongoose.model('User');
+var uuid = require('uuid');
 
 
     //Used for routes that must be authenticated.
@@ -22,7 +23,6 @@ function isAuthenticated (req, res, next) {
 };
 
 //Register the authentication middleware
-router.use('/posts', isAuthenticated);
 router.use('/meetings',isAuthenticated);
 router.use('/post',isAuthenticated);
 router.use('/topic',isAuthenticated);
@@ -59,6 +59,7 @@ router.route('/topic')
         if (err)
             res.send(err);
         var topic = new Topic();
+        topic._id = uuid.v1();
         topic.text = req.body.text;
         User.findOne({ "_id": req.body.created_by_id }, function (err, user) {
             if (err) {
@@ -113,6 +114,21 @@ router.route('/topic/:id')
             if(err)
                 res.send(err);
             res.json(meeting.topics);
+        });
+    })
+    
+    .put(function (req, res) {
+        Meeting.findOne({'topics._id':req.body.id}, function (err, meeting) {
+            if (err)
+                res.send(err);
+            var topic = meeting.topics.id(req.body.id);
+            topic.done = !topic.done;
+            meeting.save(function (err) {
+                if (err) {
+                    return res.send(500, err);
+                }
+                return res.json(topic);
+            });
         });
     }); 
     
@@ -207,7 +223,7 @@ router.route('/meetings/:id')
             res.json("deleted :(");
         });
     });   
-
+/*
 //api for all posts
 router.route('/posts')
 
@@ -274,6 +290,6 @@ router.route('/posts/:id')
             res.json("deleted :(");
         });
     });
-
+*/
 
 module.exports = router;

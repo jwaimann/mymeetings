@@ -22,6 +22,7 @@ var postSchema = new Schema({
 });
 
 var topicSchema = new Schema({
+    _id: String,
     created_by: String,
     created_at: {type: Date, default: Date.now},
     text: String,
