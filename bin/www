@@ -35,6 +35,9 @@ io.on('connection', function(socket){
     socket.on('topic message', function(msg){
       io.sockets.in(msg.room).emit('onTopic', msg.content);
     });
+/*    socket.on('topic changed', function(msg){
+      io.sockets.broadcast.to(msg.room).emit('onTopicChanged', msg.content);
+    });*/
     socket.on('create', function(room) {
       socket.join(room);
     });

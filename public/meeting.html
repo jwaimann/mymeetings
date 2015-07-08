@@ -11,7 +11,7 @@
     </div>
     <div class="clearfix sidebar-nav-fixed">
       <form  ng-Submit="post()" >
-        <textarea required class="form-control" id="m" maxlength="200" rows="3" placeholder="Say something" ng-model="newPost.text"></textarea>
+        <input required class="form-control" placeholder="Say something" ng-model="newPost.text"/>
         <input class="btn submit-btn pull-right" type="submit" value="SEND" />
       </form>
     </div>
@@ -35,7 +35,8 @@
             </form>
             <ul class="nav scrollable topics" class="small">
               <li ng-repeat="todo in todos">
-                 <input type="checkbox" ng-model="todo.done" ng-change="toggleSync(todo._id)"/><span class="done-{{todo.done}}"> {{todo.text}}</span>
+                 <!--<input type="checkbox" ng-model="todo.done" ng-change="toggleSync(todo._id)"/>-->
+                 <span class="done-{{todo.done}}"> {{todo.text}}</span>
               </li>
             </ul>
         </div>

@@ -99,6 +99,12 @@ app.controller('mainController', function (userService, topicService, messageSer
         $scope.todos.push(topic);
         $scope.$apply();
   });
+  
+ /* socket.on('onTopicChanged', function (id) {
+        var topic = $scope.todos.filter( function(item){return (item._id==id);} );
+        topic.done = !topic.done;
+        $scope.$apply();
+  });*/
 
   if ($rootScope.current_user_id != '') {
     var user = { user_id: $rootScope.current_user_id, meeting_id: $scope.meeting_id };
@@ -137,10 +143,12 @@ app.controller('mainController', function (userService, topicService, messageSer
     });
   };
 
-  $scope.toggleSync = function (item) {
-        topicService.update({ id: item });
-        //socket.emit('topic changed', '');
-  };
+ /* $scope.toggleSync = function (item) {
+        topicService.update({ id: item }, function (res) {
+          var msg = { content: item, room: $scope.meeting_id };
+          socket.emit('topic changed', msg);
+        });     
+  };*/
 });
 
 
