@@ -1,5 +1,5 @@
 /* global io */
-var app = angular.module('mymeetingsApp', ['ngRoute', 'ngResource', 'luegg.directives']).run(function ($rootScope) {
+var app = angular.module('mymeetingsApp', ['ngRoute', 'ngResource', 'luegg.directives']).run(function ($rootScope, $http) {
   $rootScope.authenticated = false;
   $rootScope.current_user = '';
   $rootScope.current_user_id = '';
